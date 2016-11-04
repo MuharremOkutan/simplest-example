@@ -1,6 +1,6 @@
-// for the simplestep 3
+// for the simplestep 4
 stage('Commit') {
-    node {
+    docker.image('maven:3.3.3-jdk-8').inside("--volume ${LOCAL_M2_REPO}:/root/.m2") {
       git url: 'https://github.com/hcguersoy/simplest-example.git'
       def mvnHome = tool 'maven339'
       echo "Directory is: " + pwd()
