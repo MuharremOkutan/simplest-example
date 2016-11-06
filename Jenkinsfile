@@ -17,3 +17,20 @@ stage('Bakery') {
     simpleImage = docker.build("simpleproject:${env.BUILD_TAG}",".")
     echo "Done Building image with tag ${env.BUILD_TAG}"
 }
+
+def simpleContainer
+stage('Start DEV') {
+    simpleImage.run("-p :8080 --name sc${env.BUILD_TAG}")
+    echo "Done Running image with tag ${env.BUILD_TAG}"
+}
+
+input "Ready to deprovision?"
+
+stage('Deprovision') {
+    node {
+        sh "docker rm -fv sc${env.BUILD_TAG}"
+        echo "Done stopping container."
+    }
+}
+
+echo "Finished!"
